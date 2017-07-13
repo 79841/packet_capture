@@ -1,29 +1,7 @@
 #include <pcap.h>
 #include <stdio.h>
-struct ether_header
-{
-	unsigned char ether_dhost[6];      
-	unsigned char ether_shost[6];
-	unsigned short ether_type;
-};
-struct ip
-{
-	unsigned char dump[12];               /* header length */
-	unsigned char ip_src[4];
-	unsigned char ip_dst[4];
-};
-struct tcp
-{
-	unsigned char pt_src[2];
-	unsigned char pt_dst[2];
-	unsigned char dump[16];
-};
-struct pket
-{
-	struct ether_header ethhd;
-	struct ip iphd;
-	struct tcp tcphd;
-};
+#include "header.h"
+
 	 int main(int argc, char *argv[])
 	 {
 		struct pket *pket;
@@ -65,13 +43,14 @@ struct pket
 			return(2);
 		}
 		/* Grab a packet */
+		k=1;
 		while(1){
 		i = pcap_next_ex(handle, &header,&packet);
 		if(i==1)
 		{
 			/* Print its length */
 	     	   	pket = (struct pket *)packet;
-			printf("--------------- Source ---------------\n");
+			printf("%d------------------- Source --------------------\n",k);
 			printf("Source Mac = ");
 			for(j=0;j<6;j++){
 			printf("%02x%c",pket->ethhd.ether_shost[j], (j == 5) ? '\n' : ':');
@@ -85,7 +64,7 @@ struct pket
 			}
 			printf("Source Port = ");
 			printf("%d\n\n",196*(int)pket->tcphd.pt_src[0]+(int)pket->tcphd.pt_src[1]);			
-			printf("------------- Destination ------------\n");
+			printf("%d----------------- Destination -----------------\n",k);
 			printf("Destination Mac = ");
 			for(j=0;j<6;j++){
 			printf("%02x%c",pket->ethhd.ether_dhost[j], (j == 5) ? '\n' : ':');
@@ -96,6 +75,13 @@ struct pket
 			}
 			printf("Destination Port = ");
 			printf("%d\n\n",196*(int)pket->tcphd.pt_dst[0]+(int)pket->tcphd.pt_dst[1]);			
+			printf("%d-------------------- Data ---------------------\n",k);
+			for(j=0;j<100;j++){
+			printf("%02x %c",pket->tcphd.data[j],((j+1)%8==0) ? ' ' : '\0');
+			if((j+1)%16==0)printf("\n");
+			}
+			printf("\n\n");
+			k++;
 			}
 		}
 		pcap_close(handle);
