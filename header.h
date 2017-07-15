@@ -1,3 +1,4 @@
+#include <pcap.h>
 struct ether_header
 {
 	unsigned char ether_dhost[6];      
@@ -23,3 +24,5 @@ struct pket
 	struct ip iphd;
 	struct tcp tcphd;
 };
+
+void grab_pket(pcap_t * handle, struct pcap_pkthdr *header, const u_char *packet);
