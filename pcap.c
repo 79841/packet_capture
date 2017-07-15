@@ -12,7 +12,7 @@ void grab_pket(pcap_t * handle, struct pcap_pkthdr *header, const u_char *packet
 		{
 			/* Print its length */
 	     	   	pket = (struct pket *)packet;
-			//if(NULL!=pket->ethhd.ether_type[1])continue;
+			if(0!=pket->ethhd.ether_type[1])continue;
 			printf("%d------------------- Source --------------------\n",k);
 			printf("Source Mac = ");
 			for(j=0;j<6;j++){
