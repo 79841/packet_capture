@@ -1,49 +1,11 @@
-#include <pcap.h>
 #include <stdio.h>
+#include <pcap.h>
 #include "header.h"
 
-	 int main(int argc, char *argv[])
-	 {
-		struct pket *pket;
-		pcap_t *handle;			/* Session handle */
-		char *dev;			/* The device to sniff on */
-		char errbuf[PCAP_ERRBUF_SIZE];	/* Error string */
-		struct bpf_program fp;		/* The compiled filter */
-		char filter_exp[] = "port 80";	/* The filter expression */
-		bpf_u_int32 mask;		/* Our netmask */
-		bpf_u_int32 net;		/* Our IP */
-		struct pcap_pkthdr *header;	/* The header that pcap gives us */
-		const u_char *packet;		/* The actual packet */
-		int i=0, j=0, k=0;
-		/* Define the device */
-		dev = pcap_lookupdev(errbuf);
-		if (dev == NULL) {
-			fprintf(stderr, "Couldn't find default device: %s\n", errbuf);
-			return(2);
-		}
-		/* Find the properties for the device */
-		if (pcap_lookupnet(dev, &net, &mask, errbuf) == -1) {
-			fprintf(stderr, "Couldn't get netmask for device %s: %s\n", dev, errbuf);
-			net = 0;
-			mask = 0;
-		}
-		/* Open the session in promiscuous mode */
-		handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
-		if (handle == NULL) {
-			fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
-			return(2);
-		}
-		/* Compile and apply the filter */
-		if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1) {
-			fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
-			return(2);
-		}
-		if (pcap_setfilter(handle, &fp) == -1) {
-			fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
-			return(2);
-		}
+void grab_pket(pcap_t * handle, struct pcap_pkthdr *header, const u_char *packet){	
 		/* Grab a packet */
-		k=1;
+		int i=0, j=0, k=1;
+		struct pket *pket;
 		while(1){
 		i = pcap_next_ex(handle, &header,&packet);
 		if(i==1)
@@ -84,6 +46,4 @@
 			k++;
 			}
 		}
-		pcap_close(handle);
-		return(0);
-	 }
+}
