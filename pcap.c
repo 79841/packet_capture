@@ -22,8 +22,8 @@ void grab_pket(pcap_t * handle, struct pcap_pkthdr *header, const u_char *packet
 			//while(){printf("%c",packet[j]);j++;}
 			//printf("%s\n",ip_header->ip_src.s_addr);
 			printf("Source IP = ");
-			for(j=0;j<3;j++){
-			printf("%d%c",(int)pket->iphd.ip_src[j],(j == 2) ? '\n' : '.');
+			for(j=0;j<4;j++){
+			printf("%d%c",(int)pket->iphd.ip_src[j],(j == 3) ? '\n' : '.');
 			}
 			printf("Source Port = ");
 			printf("%d\n\n",196*(int)pket->tcphd.pt_src[0]+(int)pket->tcphd.pt_src[1]);			
@@ -33,8 +33,8 @@ void grab_pket(pcap_t * handle, struct pcap_pkthdr *header, const u_char *packet
 			printf("%02x%c",pket->ethhd.ether_dhost[j], (j == 5) ? '\n' : ':');
 			}
 			printf("Destination IP = ");
-			for(j=0;j<3;j++){
-			printf("%d%c",(int)pket->iphd.ip_dst[j],(j == 2) ? '\n' : '.');
+			for(j=0;j<4;j++){
+			printf("%d%c",(int)pket->iphd.ip_dst[j],(j == 3) ? '\n' : '.');
 			}
 			printf("Destination Port = ");
 			printf("%d\n\n",196*(int)pket->tcphd.pt_dst[0]+(int)pket->tcphd.pt_dst[1]);			
