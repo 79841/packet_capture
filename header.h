@@ -3,7 +3,7 @@ struct ether_header
 {
 	unsigned char ether_dhost[6];      
 	unsigned char ether_shost[6];
-	unsigned short ether_type;
+	unsigned char ether_type[2];
 };
 struct ip
 {
