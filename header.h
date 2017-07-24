@@ -1,4 +1,7 @@
 #include <pcap.h>
+#include <arpa/inet.h>
+#define ETHERTYPE_IP 0x0800
+#define PROTO_TCP 0x06 
 struct ether_header
 {
 	unsigned char ether_dhost[6];      
@@ -7,22 +10,36 @@ struct ether_header
 };
 struct ip
 {
-	unsigned char dump[12];
-	unsigned char ip_src[4];
-	unsigned char ip_dst[4];
+	uint8_t ip_hl:4;
+	uint8_t ip_v:4;
+	uint8_t ip_tos;
+	uint16_t ip_len;
+	uint16_t ip_id;
+	uint16_t ip_off;
+	uint8_t ip_ttl;
+	uint8_t ip_p;
+	uint16_t ip_sum;
+	uint32_t ip_src,ip_dst;
 };
 struct tcp
 {
-	unsigned char pt_src[2];
-	unsigned char pt_dst[2];
-	unsigned char dump[20];
-	unsigned char data[100];
+	uint16_t th_sport;
+	uint16_t th_dport;
+	uint32_t th_seq;
+	uint32_t th_ack;
+	uint8_t th_off:4;
+	uint8_t th_x2:4;
+	uint8_t th_flags;
+	uint16_t th_win;
+	uint16_t th_sum;
+	uint16_t th_urp;
 };
-struct pket
+
+/*struct pket
 {
 	struct ether_header ethhd;
 	struct ip iphd;
 	struct tcp tcphd;
-};
+};*/
 
 void grab_pket(pcap_t * handle, struct pcap_pkthdr *header, const u_char *packet);

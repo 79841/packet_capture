@@ -11,7 +11,8 @@
 		char filter_exp[] = "port 80";	/* The filter expression */
 		bpf_u_int32 mask;		/* Our netmask */
 		bpf_u_int32 net;		/* Our IP */
-		struct pcap_pkthdr *header;	/* The header that pcap gives us */
+		struct pcap_pkthdr *header;	/* The h
+eader that pcap gives us */
 		const u_char *packet;		/* The actual packet */
 		int i=0, j=0, k=0;
 		/* Define the device */
